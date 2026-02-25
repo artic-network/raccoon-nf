@@ -58,10 +58,10 @@ process treePrune {
 }
 
 process treeQC {
-    container "${params.container}@${params.container_sha}", mode: "copy"
+    container "${params.container}@${params.container_sha}"
     conda "${HOME}/miniconda3/envs/raccoon"
 
-    publishDir "output/${input_ID}/tree-qc/"
+    publishDir "output/${input_ID}/tree-qc/", mode: "copy"
 
     input:
     tuple val(input_ID), path(pruned_treefile)
