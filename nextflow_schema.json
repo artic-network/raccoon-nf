@@ -34,8 +34,8 @@
           "help_text": ""
         },
         "max_n_content": {
-          "type": "integer",
-          "title": "Maximum read length",
+          "type": "number",
+          "title": "Maximum N content",
           "description": "Maximum N content proportion to keep (e.g. 0.1)",
           "default": 0.2,
           "help_text": ""
