@@ -3,6 +3,8 @@ process seqQC {
     conda "${HOME}/miniconda3/envs/raccoon"
 
     publishDir "output/${input_fasta.baseName}/seq-qc/", mode: "copy"
+    
+    debug true
 
     input:
     path input_fasta
@@ -16,12 +18,14 @@ process seqQC {
 
     script:
     // This bit of logic checks if the input is a single fasta or a directory of fastas
+    print input_fasta
     if ( input_fasta.extension.equals("fa*") ) {
         input_file = input_fasta;
     }else {
         input_list = file("${input_fasta}/*.fa*")
         input_file = "${input_list.join(' ')}"
-    } 
+    }
+    print input_file
     """
     raccoon seq-qc ${input_file} -o ${input_fasta.baseName}.seq_qc.fasta --metadata ${input_metadata} --metadata-id-field accessionVersion --metadata-location-field geoLocCountry --metadata-date-field sampleCollectionDate --min-length ${min_length} --max-n-content ${max_n}
     """
