@@ -27,6 +27,9 @@ process seqQC {
     }
     print input_file
     """
+    echo ${input_fasta}
+    echo ..............................
+    echo ${input_file}
     raccoon seq-qc ${input_file} -o ${input_fasta.baseName}.seq_qc.fasta --metadata ${input_metadata} --metadata-id-field accessionVersion --metadata-location-field geoLocCountry --metadata-date-field sampleCollectionDate --min-length ${min_length} --max-n-content ${max_n}
     """
 }
