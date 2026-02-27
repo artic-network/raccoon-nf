@@ -24,6 +24,7 @@ process seqQC {
         input_path = file(input_fasta.toRealPath())
 	input_dir_files = input_path.list()
 	matching_files =  input_dir_files.findAll { a -> fasta_extensions.any { a.contains(it) } }
+    fasta_extensions = [".fasta", ".fa"]
 	input_file = matching_files.collect {"$input_fasta/$it"}.join(" ")
     }
     """
