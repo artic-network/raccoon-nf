@@ -23,8 +23,8 @@
           "type": "string",
           "format": "path",
           "title": "Metadata",
-          "description": "Input metadata file for your fasta file. (Not Required)",
-          "help_text": "This is the path to one metadata file, or one folder of metadata files."
+          "description": "Input metadata file(s) for your fasta file.",
+          "help_text": "This is the path to one metadata file or one folder containing metadata files. Metadata file extensions must be one or more of '.csv', '.tsv' or '.tab'. Caution: If given a directory it will try to parse ALL files with these file extensions so ensure only appropriate files are in the folder."
         },
         "min_length": {
           "type": "integer",
@@ -55,7 +55,8 @@
       "allOf": [
         {
           "required": [
-            "fasta"
+            "fasta",
+            "metadata"
           ]
         }
       ]

@@ -7,10 +7,11 @@ workflow seq_qc {
     main:
     // Define the input channels
     inFasta_ch = Channel.fromPath("${params.fasta}")
+    inMetadata_ch = Channel.fromPath("${params.metadata}")
     inMinLen_ch = Channel.value("${params.min_length}")
     inMaxN_ch = Channel.value("${params.max_n_content}")
     // Call the functions
-    seqQC(inFasta_ch,inMinLen_ch,inMaxN_ch)
+    seqQC(inFasta_ch, inMetadata_ch, inMinLen_ch, inMaxN_ch)
     mafftAlign(seqQC.out.seq_qc_fasta)
     alnQC(mafftAlign.out.aln)
     

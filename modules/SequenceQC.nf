@@ -8,6 +8,7 @@ process seqQC {
 
     input:
     path input_fasta
+    path input_metadata
     val min_length
     val max_n
 
@@ -19,25 +20,29 @@ process seqQC {
     // This bit of logic checks if the input is a single fasta or a directory of fastas
     if ( input_fasta.extension.equals("fasta") || input_fasta.extension.equals("fa")) {
         input_file = input_fasta;
-    }else {
+    } else {
         input_path = file(input_fasta.toRealPath())
-	input_dir_files = input_path.list()
-    fasta_extensions = [".fasta", ".fa"]
-	matching_files =  input_dir_files.findAll { a -> fasta_extensions.any { a.contains(it) } }
-	input_file = matching_files.collect {"$input_fasta/$it"}.join(" ")
+	    input_dir_files = input_path.list()
+        fasta_extensions = [".fasta", ".fa"]
+	    matching_files =  input_dir_files.findAll { a -> fasta_extensions.any { a.contains(it) } }
+	    input_file = matching_files.collect {"$input_fasta/$it"}.join(" ")
+    }
+    if ( input_metadata.extension.equals("csv") || input_metadata.extension.equals("tsv")) { 
+        input_metadata_file =  input_metadata
+    } else {
+        input_path = file(input_metadata.toRealPath())
+	    input_dir_files = input_path.list()
+        metadata_extensions = [".csv", ".tsv",".tab"]
+	    matching_files =  input_dir_files.findAll { a -> metadata_extensions.any { a.contains(it) } }
+	    input_metadata_file = matching_files.collect {"$input_metadata/$it"}.join(" ")
     }
     
     // Parse any extra flags
     extra = ""
-    if (params.metadata) {
-        if ( params.metadata.extension.equals("csv") || input_fasta.extension.equals("tsv")) 
-            extra += " --metadata ${params.metadata}"
-    }
 
     """
-    echo "Input: ${input_fasta}"
-    echo "Found the following files: ${input_file}"
-    raccoon seq-qc ${input_file} -o ${input_fasta.baseName}.seq_qc.fasta --min-length ${min_length} --max-n-content ${max_n} ${extra}
+    echo -e "\nInput --fasta: ${input_fasta}\nFound the following file(s): ${input_file}\n\nInput --metadata: ${input_metadata}\nFound the following metadata file(s): ${input_metadata_file}"
+    raccoon seq-qc ${input_file} -o ${input_fasta.baseName}.seq_qc.fasta --metadata ${input_metadata_file} --min-length ${min_length} --max-n-content ${max_n} ${extra}
     """
 }
 
