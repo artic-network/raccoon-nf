@@ -17,14 +17,14 @@
           "format": "path",
           "title": "FASTA",
           "description": "Input sequences in fasta format.",
-          "help_text": ""
+          "help_text": "You can provide either a single '.fasta' or '.fa' file, or one folder which will be searched for all '.fasta' or '.fa' files."
         },
         "metadata": {
           "type": "string",
           "format": "path",
           "title": "Metadata",
-          "description": "Input metadata file for your fasta file.",
-          "help_text": ""
+          "description": "Input metadata file for your fasta file. (Not Required)",
+          "help_text": "This is the path to one metadata file, or one folder of metadata files."
         },
         "min_length": {
           "type": "integer",
@@ -40,17 +40,14 @@
           "default": 0.2,
           "help_text": ""
         },
-        "medaka_model": {
+        "tree_model": {
           "type": "string",
           "format": "value",
-          "title": "Medaka Model",
-          "description": "Choose the approporiate medaka model for your analysis",
-          "help_text": "The medaka model is chosens depending on whaich flow cell type you have used, what version of Guppy you have used, and what basecalling method you have used",
-          "default": "r941_min_high_g360",
-          "enum": ["r103_fast_g507", "r103_fast_snp_g507", "r103_fast_variant_g507", "r103_hac_g507", "r103_hac_snp_g507", "r103_hac_variant_g507", "r103_min_high_g345", "r103_min_high_g360", "r103_prom_high_g360", "r103_prom_snp_g3210", "r103_prom_variant_g3210", "r103_sup_g507", "r103_sup_snp_g507", "r103_sup_variant_g507", "r1041_e82_260bps_fast_g632", "r1041_e82_260bps_fast_variant_g632", "r1041_e82_260bps_hac_g632", "r1041_e82_260bps_hac_v4.0.0", "r1041_e82_260bps_hac_v4.1.0", "r1041_e82_260bps_hac_variant_g632", "r1041_e82_260bps_hac_variant_v4.1.0", "r1041_e82_260bps_sup_g632", "r1041_e82_260bps_sup_v4.0.0", "r1041_e82_260bps_sup_v4.1.0", "r1041_e82_260bps_sup_variant_g632", "r1041_e82_260bps_sup_variant_v4.1.0", "r1041_e82_400bps_fast_g615", "r1041_e82_400bps_fast_g632", "r1041_e82_400bps_fast_variant_g615", 
-          "r1041_e82_400bps_fast_variant_g632", "r1041_e82_400bps_hac_g615", "r1041_e82_400bps_hac_g632", "r1041_e82_400bps_hac_v4.0.0", "r1041_e82_400bps_hac_v4.1.0", "r1041_e82_400bps_hac_v4.2.0", "r1041_e82_400bps_hac_variant_g615", "r1041_e82_400bps_hac_variant_g632", "r1041_e82_400bps_hac_variant_v4.1.0", "r1041_e82_400bps_hac_variant_v4.2.0", "r1041_e82_400bps_sup_g615", "r1041_e82_400bps_sup_v4.0.0", "r1041_e82_400bps_sup_v4.1.0", "r1041_e82_400bps_sup_v4.2.0", "r1041_e82_400bps_sup_variant_g615", "r1041_e82_400bps_sup_variant_v4.1.0", "r1041_e82_400bps_sup_variant_v4.2.0", "r104_e81_fast_g5015, r104_e81_fast_variant_g5015", "r104_e81_hac_g5015", "r104_e81_hac_variant_g5015", "r104_e81_sup_g5015", "r104_e81_sup_g610", "r104_e81_sup_variant_g610", "r10_min_high_g303", "r10_min_high_g340", "r941_e81_fast_g514",
-          "r941_e81_fast_variant_g514", "r941_e81_hac_g514", "r941_e81_hac_variant_g514", "r941_e81_sup_g514", "r941_e81_sup_variant_g514", "r941_min_fast_g303", "r941_min_fast_g507", "r941_min_fast_snp_g507", "r941_min_fast_variant_g507", "r941_min_hac_g507", "r941_min_hac_snp_g507", "r941_min_hac_variant_g507", "r941_min_high_g303", "r941_min_high_g330", "r941_min_high_g340_rle", "r941_min_high_g344", "r941_min_high_g351", "r941_min_high_g360", "r941_min_sup_g507", "r941_min_sup_snp_g507", "r941_min_sup_variant_g507", "r941_prom_fast_g303", "r941_prom_fast_g507", "r941_prom_fast_snp_g507", "r941_prom_fast_variant_g507", "r941_prom_hac_g507", "r941_prom_hac_snp_g507", "r941_prom_hac_variant_g507", "r941_prom_high_g303", "r941_prom_high_g330", "r941_prom_high_g344", "r941_prom_high_g360", "r941_prom_high_g4011", 
-          "r941_prom_snp_g303", "r941_prom_snp_g322", "r941_prom_snp_g360", "r941_prom_sup_g507", "r941_prom_sup_snp_g507", "r941_prom_sup_variant_g507", "r941_prom_variant_g303", "r941_prom_variant_g322", "r941_prom_variant_g360", "r941_sup_plant_g610", "r941_sup_plant_variant_g610"
+          "title": "IQ-TREE substitution model",
+          "description": "Choose which substitution model IQ-TREE will use to reconstruct a phylogenetic tree.",
+          "help_text": "The default, TEST, will make iqtree run the model selection step and automatically choose its preferred model. The 'MFP' option will run the model selection step with the addition of FreeRate models",
+          "default": "TEST",
+          "enum": ["TEST","MFP","JC","HKY","TN","GTR","JC+G","HKY+G","TN+G","GTR+G"
                   ]
         }
 
@@ -58,11 +55,66 @@
       "allOf": [
         {
           "required": [
-            "fasta",
-            "metadata"
+            "fasta"
           ]
         }
       ]
+    },
+    "seq_qc": {
+      "title": "Sequence QC Options",
+      "type": "object",
+      "fa_icon": "fas fa-wrench",
+      "description": "Change settings for the Raccoon seq-qc module.",
+      "properties": {
+        "metadata_delimiter": {
+          "type": "string",
+          "format": "value",
+          "title": "Metadata Delimiter",
+          "description": "Metadata file delimiter (default: ,; auto-detects .tsv/.tab)",
+          "help_text": "Explicitly choose what delimiter to use when parsing the metadata files."
+        },
+        "metadata_id_field": {
+          "type": "string",
+          "format": "value",
+          "title": "Metadata ID field",
+          "description": "Metadata id column (default: id)",
+          "help_text": "Provide the header of the ID column in the provided metadata file."
+        },
+        "metadata_location_field": {
+          "type": "string",
+          "format": "value",
+          "title": "Metadata Location field",
+          "description": "Metadata location column (default: location)",
+          "help_text": "Provide the header of the location column in the provided metadata file."
+        },
+        "metadata_date_field": {
+          "type": "string",
+          "format": "value",
+          "title": "Metadata Date field",
+          "description": "Metadata Date column (default: date)",
+          "help_text": "Provide the header of the ID column in the provided metadata file."
+        },
+        "header_separator": {
+          "type": "string",
+          "format": "value",
+          "title": "Header separator",
+          "description": "Choose the header separator (default: |)",
+          "help_text": "The header separator is the character that separates each element in the newly generated headers."
+        },
+        "id_delimiter": {
+          "type": "string",
+          "format": "value",
+          "title": "ID delimiter",
+          "description": "Choose the ID delimiter (default: |)",
+          "help_text": "The ID delimiter is the character that separates each element in the headers provided in your fasta files."
+        },
+        "id_field": {
+          "type": "integer",
+          "title": "ID field",
+          "description": "Choose the 0-based index position of the ID in your input headers (default: 0)",
+          "help_text": "If the header is split using the delimiter from 'ID delimiter' above, choose the 0-based position of the sequence ID that can be used to match the Metadata ID."
+        }
+      }
     },
     "output_options": {
       "title": "Output Options",
