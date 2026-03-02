@@ -99,7 +99,36 @@ process alnQC {
     path "*"
 
     script:
+    // Parse any extra flags
+    extra = ""
+    if (params.cluster_window) {
+        extra += " --cluster-window ${params.cluster_window}"
+    }
+    if (params.cluster_count) {
+        extra += " --cluster-count ${params.cluster_count}"
+    }
+    if (params.mask_clustered == true) {
+        extra += " --mask-clustered"
+    } else if (params.mask_clustered == false) {
+        extra += " --no-mask-clustered"
+    }
+    if (params.mask_n_adjacent == true) {
+        extra += " --mask-n-adjacent"
+    } else if (params.mask_n_adjacent == false) {
+        extra += " --no-mask-n-adjacent"
+    }
+    if (params.mask_gap_adjacent == true) {
+        extra += " --mask-gap-adjacent"
+    } else if (params.mask_gap_adjacent == false) {
+        extra += " --no-mask-gap-adjacent"
+    }
+    if (params.mask_frame_break == true) {
+        extra += " --mask-frame-break"
+    } else if (params.mask_frame_break == false) {
+        extra += " --no-mask-frame-break"
+    }
+    
     """
-    raccoon aln-qc ${aln_fasta}
+    raccoon aln-qc ${aln_fasta} ${extra}
     """
 }
