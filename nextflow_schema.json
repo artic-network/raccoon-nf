@@ -40,6 +40,20 @@
           "default": 0.2,
           "help_text": ""
         },
+        "alignment_only": {
+          "type": "boolean",
+          "title": "Only run alignment steps",
+          "default": false,
+          "description": "Stop workflow after alignment step. (default: False).",
+          "help_text": "If selected, the seq-qc, mafft alignment, and aln-qc steps will run and the workflow will end. A mask file will be produced as per the flags in 'Alignment QC Options' but will not be applied to your alignment."
+        },
+        "run_mask": {
+          "type": "boolean",
+          "title": "Run masking step",
+          "default": false,
+          "description": "Mask the input alignment before running IQ-TREE (default: False).",
+          "help_text": "By default no masking of the alignment generated from your input fasta files will happen. If masking is not selected (default), a mask file will still be generated as per the flags in 'Alignment QC Options' so you can see what would be masked in your alignment if you run this masking step."
+        },
         "tree_model": {
           "type": "string",
           "title": "IQ-TREE substitution model",
@@ -115,20 +129,6 @@
       "fa_icon": "fas fa-wrench",
       "description": "Change settings for the Raccoon aln-qc module.",
       "properties": {
-        "alignment_only": {
-          "type": "boolean",
-          "title": "Only run alignment steps",
-          "default": false,
-          "description": "Stop workflow after alignment step. (default: False).",
-          "help_text": "If selected, the seq-qc, mafft alignment, and aln-qc steps will run and the workflow will end. A mask file will be produced as per the flags below but will not be applied to your alignment."
-        },
-        "skip_mask": {
-          "type": "boolean",
-          "title": "Skip masking step",
-          "default": false,
-          "description": "Skip all masking of the alignment (default: False).",
-          "help_text": "If you choose this no masking of your alignment will happen, but a mask file will still be produced as per the flags below so you can see what would be masked."
-        },
         "cluster_window": {
           "type": "integer",
           "title": "Cluster window size",

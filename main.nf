@@ -96,10 +96,10 @@ workflow {
     } else {
         seq_qc(inFasta_ch,inMetadata_ch,inMinLen_ch,inMaxN_ch)
         // Choose to use the generated mask or not
-        if (params.skip_mask == false) {
+        if (params.run_mask == true) {
             mask_aln(seq_qc.out.aln_tuple, seq_qc.out.mask_tuple)
             tree_qc(mask_aln.out.maskAln_tuple)
-        } else if (params.skip_mask == true) {
+        } else {
             tree_qc(seq_qc.out.aln_tuple)
         }
     }
