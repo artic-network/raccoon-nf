@@ -35,10 +35,10 @@ process seqQC {
         extra += " --metadata-date-field ${params.metadata_date_field}"
     }
     if (params.seq_id_delimiter) {
-        extra += " --seq_id_delimiter '${params.id_delimiter}'"
+        extra += " --seq-id-delimiter '${params.seq_id_delimiter}'"
     }
-    if (params.seq_id_field) {
-        extra += " --id-field ${params.id_field}"
+    if (params.seq_id_field_index) {
+        extra += " --seq-id-field-index ${params.seq_id_field_index}"
     }
     if (params.header_separator) {
         extra += " --header-separator '${params.header_separator}'"
@@ -49,7 +49,7 @@ process seqQC {
 
     """
     echo -e "\nFound the following fasta file(s): ${input_fasta}\n\nFound the following metadata file(s): ${input_metadata}"
-    raccoon seq-qc ${input_fasta} -o ${sample_name}.seq_qc.fasta --min-length ${min_length} --max-n-content ${max_n} ${extra}
+    raccoon seq-qc --fasta ${input_fasta} --outfile ${sample_name}.seq_qc.fasta --min-length ${min_length} --max-n-content ${max_n} ${extra}
     """
 }
 
@@ -88,7 +88,7 @@ process alnQC {
     // Parse any extra flags
     extra = ""
     // Standardise n content thresholds between aln-qc and seq-qc
-    extra += " --n-threshold ${params.max_n_content}"
+    extra += " --max-n-content ${params.max_n_content}"
     
     if (params.cluster_window) {
         extra += " --cluster-window ${params.cluster_window}"
@@ -96,25 +96,20 @@ process alnQC {
     if (params.cluster_count) {
         extra += " --cluster-count ${params.cluster_count}"
     }
-    if (params.mask_clustered == true) {
-        extra += " --mask-clustered"
-    } else if (params.mask_clustered == false) {
-        extra += " --no-mask-clustered"
+    if (params.no_flag_clustered == true) {
+        extra += " --no-flag-clustered"
     }
-    if (params.mask_n_adjacent == true) {
-        extra += " --mask-n-adjacent"
-    } else if (params.mask_n_adjacent == false) {
-        extra += " --no-mask-n-adjacent"
+    if (params.no_flag_n_adjacent == true) {
+        extra += " --no-flag-n-adjacent"
     }
-    if (params.mask_gap_adjacent == true) {
-        extra += " --mask-gap-adjacent"
-    } else if (params.mask_gap_adjacent == false) {
-        extra += " --no-mask-gap-adjacent"
+    if (params.no_flag_gap_adjacent == true) {
+        extra += " --no-flag-gap-adjacent"
     }
-    if (params.mask_frame_break == true) {
-        extra += " --mask-frame-break"
-    } else if (params.mask_frame_break == false) {
-        extra += " --no-mask-frame-break"
+    if (params.no_flag_frame_break == true) {
+        extra += " --no-flag-frame-break"
+    }
+    if (params.flag_removal_threshold == true) {
+        extra += " --flag-removal-threshold ${params.flag_removal_threshold}"
     }
     
     """
