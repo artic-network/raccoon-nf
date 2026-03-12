@@ -2,18 +2,18 @@ process seqQC {
     container "${params.container}@${params.container_sha}"
     conda "${HOME}/miniconda3/envs/raccoon"
 
-    publishDir "output/${input_fasta.baseName}/seq-qc/", mode: "copy"
+    publishDir "output/${input_ID}/seq-qc/", mode: "copy"
     
     debug true
 
     input:
-    tuple val(sample_name), path(input_fasta)
+    tuple val(input_ID), path(input_fasta)
     path input_metadata
     val min_length
     val max_n
 
     output:
-    tuple val(sample_name), path("*.seq_qc.fasta"), emit: seq_qc_fasta
+    tuple val(input_ID), path("*.seq_qc.fasta"), emit: seq_qc_fasta
     path "*"
 
     script:
@@ -49,7 +49,7 @@ process seqQC {
 
     """
     echo -e "\nFound the following fasta file(s): ${input_fasta}\n\nFound the following metadata file(s): ${input_metadata}"
-    raccoon seq-qc --fasta ${input_fasta} --outfile ${sample_name}.seq_qc.fasta --min-length ${min_length} --max-n-content ${max_n} ${extra}
+    raccoon seq-qc --fasta ${input_fasta} --outfile ${input_ID}.seq_qc.fasta --min-length ${min_length} --max-n-content ${max_n} ${extra}
     """
 }
 
