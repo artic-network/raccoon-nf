@@ -104,20 +104,20 @@ process treeQC {
     if (params.run_apobec == true) {
         extra += " --run-apobec"
     }
-    if (params.tip_fields) {
+    if (params.header_fields) {
+        extra += " --tip-fields '${params.header_fields}'"
+    } else if (params.tip_fields) {
         extra += " --tip-fields '${params.tip_fields}'"
-    } 
+    }
     if (params.tip_field_delimiter) {
     extra += " --tip-field-delimiter '${params.tip_field_delimiter}'"
     }
     if (params.tip_date_field) {
     extra += " --tip-date-field '${params.tip_date_field}'"
     }
-    if (params.midpoint_root == true) {
+    if (params.midpoint_root == true) && !(params.outgroup) {
     extra += " --midpoint-root"
     }
-
-
     if (params.fig_height) {
         extra += " --height ${params.fig_height}"
     }

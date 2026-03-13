@@ -42,17 +42,17 @@
         },
         "alignment_only": {
           "type": "boolean",
-          "title": "Only run alignment steps",
+          "title": "Stop workflow after alignment steps",
           "default": false,
-          "description": "Stop workflow after alignment step. (default: False).",
+          "description": "Stop workflow after alignment step so no masking or tree building is run. (default: Run entire pipeline).",
           "help_text": "If selected, the seq-qc, mafft alignment, and aln-qc steps will run and the workflow will end. A mask file will be produced as per the flags in 'Alignment QC Options' but will not be applied to your alignment."
         },
         "run_mask": {
           "type": "boolean",
           "title": "Run masking step",
           "default": false,
-          "description": "Mask the input alignment before running IQ-TREE (default: False).",
-          "help_text": "By default no masking of the alignment generated from your input fasta files will happen. If masking is not selected (default), a mask file will still be generated as per the flags in 'Alignment QC Options' so you can see what would be masked in your alignment if you run this masking step."
+          "description": "Mask the input alignment before running IQ-TREE (default: Do NOT mask).",
+          "help_text": "By default, the alignment generated from your input fasta files will NOT have problematic sites masked. If masking is not selected (default), a mask file will still be generated as per the flags in 'Alignment QC Options' so you can see what would be masked in your alignment if you run this masking step."
         },
         "tree_model": {
           "type": "string",
@@ -236,8 +236,8 @@
         "tip_fields": {
           "type": "string",
           "title": "Tip fields",
-          "description": "Template for parsing the tip label fields for colouring (default: {id}|{location}|{date})",
-          "help_text": "The fields need to match the sequence headers if altered by using 'header_fields' in the 'Sequence QC options' section, or using another non-standard fasta headers."
+          "description": "Template for parsing the tip label fields for colouring (default: {id}|{location}|{date} OR 'header_fields' from 'Sequence QC options' if given).",
+          "help_text": "If 'header_fields' in the 'Sequence QC options' section has been specified this option will use that input by default."
         },
         "tip_field_delimiter": {
           "type": "string",
@@ -254,7 +254,8 @@
         "midpoint_root": {
           "type": "boolean",
           "title": "Midpoint root",
-          "description": "Midpoint root the resulting tree for report visualisation.",
+          "default": true,
+          "description": "Midpoint root the resulting tree for report visualisation (Default: True if no outgroup provided).",
           "help_text": "This is only applied when an outgroup has NOT been provided, as otherwise Ancestral State Reconstruction is run which requires trees to be outgroup rooted."
         },
         "fig_height": {
