@@ -184,7 +184,7 @@
       }
     },
     "iqtree_prune": {
-      "title": "IQTREE",
+      "title": "Tree Building Options",
       "type": "object",
       "fa_icon": "fas fa-wrench",
       "description": "Change settings for IQTREE.",
@@ -194,6 +194,21 @@
           "title": "Outgroup",
           "description": "Sequence header for the outgroup to be used in tree building (default: no outgroup)",
           "help_text": "This needs to match the sequence header of the outgroup after any header manipulation by seq-qc. For example if there was no metadata for the outgroup this may look like 'IDXXXX||'. This will also be used to prune the outgroup from the resulting tree."          
+        },
+        "midpoint_root": {
+          "type": "boolean",
+          "title": "Midpoint root",
+          "description": "Midpoint root the resulting tree for report visualisation.",
+          "help_text": "This is only applied when an outgroup has NOT been provided, as otherwise Ancestral State Reconstruction is run which requires trees to be outgroup rooted."
+        },
+        "tree_model": {
+          "type": "string",
+          "title": "IQTREE substitution model",
+          "description": "Choose which substitution model IQTREE will use to reconstruct a phylogenetic tree.",
+          "help_text": "The default, TEST, will make IQTREE run the model selection step and automatically choose its preferred model. The 'MFP' option will run the model selection step with the addition of FreeRate models",
+          "default": "TEST",
+          "enum": ["TEST","MFP","JC","HKY","TN","GTR","JC+G","HKY+G","TN+G","GTR+G"
+                  ]
         }
       }
     },
