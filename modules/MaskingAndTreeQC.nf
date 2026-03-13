@@ -115,7 +115,7 @@ process treeQC {
     if (params.tip_date_field) {
     extra += " --tip-date-field '${params.tip_date_field}'"
     }
-    if (params.midpoint_root == true) && !(params.outgroup) {
+    if ((params.midpoint_root == true) && !(params.outgroup)) {
     extra += " --midpoint-root"
     }
     if (params.fig_height) {
