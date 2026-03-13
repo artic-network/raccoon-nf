@@ -121,12 +121,12 @@
           "title": "Header fields",
           "description": "Preconfigured template for constructing harmonised sequence headers ( e.g. {sample}|{location}|{date} ).",
           "help_text": "Choose from the common header templates provided or build a custom one in the 'Custom header template' option below.",
-          "default": "{sample}|{location}|{date}",
-          "enum": ["{sample}|{location}|{date}",
-          "{sample}|{admin1}|{admin2}|{date}",
-          "{sample}|{country}|{date}",
-          "{sample}|{host}|{location}|{date}",
-          "{sample}|{location}|{collection_date}"
+          "default": "'{sample}|{location}|{date}'",
+          "enum": ["'{sample}|{location}|{date}'",
+          "'{sample}|{admin1}|{admin2}|{date}'",
+          "'{sample}|{country}|{date}'",
+          "'{sample}|{host}|{location}|{date}'",
+          "'{sample}|{location}|{collection_date}'"
                   ]
         },
         "custom_header_fields": {
@@ -316,6 +316,18 @@
       "$ref": "#/definitions/input_options"
     },
     {
+      "$ref": "#/definitions/pipeline_options"
+    },
+    {
+      "$ref": "#/definitions/seq_qc"
+    },
+    {
+      "$ref": "#/definitions/aln_qc"
+    },
+    {
+      "$ref": "#/definitions/tree_qc"
+    },
+    {
       "$ref": "#/definitions/output_options"
     },
     {
@@ -348,7 +360,7 @@
     }
   },
   "docs": {
-    "intro": "\nLorem Ipsum Dolor\n\n",
+    "intro": "\nRaccoon docs\n\n",
     "links": "## Useful links\n\n* [nextflow](https://www.nextflow.io/)\n* [docker](https://www.docker.com/products/docker-desktop)"
   }
 }
