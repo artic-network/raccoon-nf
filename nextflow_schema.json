@@ -93,6 +93,13 @@
           "title": "Midpoint root",
           "description": "Midpoint root the resulting tree for report visualisation.",
           "help_text": "This is only applied when an outgroup has NOT been provided, as otherwise Ancestral State Reconstruction is run which requires trees to be outgroup rooted."
+        },
+        "threads": {
+          "type": "integer",
+          "default": 2,
+          "title": "Maximum number of CPU threads",
+          "description": "Maximum number of CPU threads to use per workflow task.",
+          "help_text": "Several tasks in this workflow benefit from using multiple CPU threads. This option sets the number of CPU threads for all such processes. The total CPU resource used by the workflow is constrained by the executor configuration. See server threads parameter for kraken specific threads."
         }
       }
     },
@@ -121,12 +128,12 @@
           "title": "Header fields",
           "description": "Preconfigured template for constructing harmonised sequence headers ( e.g. {sample}|{location}|{date} ).",
           "help_text": "Choose from the common header templates provided or build a custom one in the 'Custom header template' option below.",
-          "default": "'{sample}|{location}|{date}'",
-          "enum": ["'{sample}|{location}|{date}'",
-          "'{sample}|{admin1}|{admin2}|{date}'",
-          "'{sample}|{country}|{date}'",
-          "'{sample}|{host}|{location}|{date}'",
-          "'{sample}|{location}|{collection_date}'"
+          "default": "{sample}|{location}|{date}",
+          "enum": ["{sample}|{location}|{date}",
+          "{sample}|{admin1}|{admin2}|{date}",
+          "{sample}|{country}|{date}",
+          "{sample}|{host}|{location}|{date}",
+          "{sample}|{location}|{collection_date}"
                   ]
         },
         "custom_header_fields": {
@@ -273,21 +280,6 @@
         }
       }
     },
-    "advanced_options": {
-      "title": "Advanced Options",
-      "type": "object",
-      "description": "Advanced options for configuring processes inside the workflow.",
-      "default": "",
-      "properties": {
-        "threads": {
-          "type": "integer",
-          "default": 2,
-          "title": "Maximum number of CPU threads",
-          "description": "Maximum number of CPU threads to use per workflow task.",
-          "help_text": "Several tasks in this workflow benefit from using multiple CPU threads. This option sets the number of CPU threads for all such processes. The total CPU resource used by the workflow is constrained by the executor configuration. See server threads parameter for kraken specific threads."
-        }
-      }
-    },
     "miscellaneous_options": {
       "title": "Miscellaneous Options",
       "type": "object",
@@ -331,9 +323,6 @@
       "$ref": "#/definitions/output_options"
     },
     {
-      "$ref": "#/definitions/advanced_options"
-    },
-    {
       "$ref": "#/definitions/miscellaneous_options"
     }
   ],
@@ -355,7 +344,7 @@
       "type": "boolean",
       "default": true
     },
-    "show_hidden_params": {
+    "show_hidden": {
       "type": "boolean"
     }
   },
