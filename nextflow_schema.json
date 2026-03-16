@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema",
   "$id": "https://raw.githubusercontent.com/Desperate-Dan/raccoon-nf/main/nextflow_schema.json",
   "title": "Desperate-Dan/raccoon-nf",
-  "description": "Implementation of Raccoon (https://github.com/artic-network/raccoon) in Nextflow.",
+  "description": "Implementation of raccoon (https://github.com/artic-network/raccoon) in Nextflow.",
   "url": "https://github.com/Desperate-Dan/raccoon-nf",
   "type": "object",
   "definitions": {
@@ -26,44 +26,24 @@
           "description": "Input metadata file(s) for your fasta file.",
           "help_text": "This is the path to one metadata file or one folder containing metadata files. Metadata file extensions must be one or more of '.csv', '.tsv' or '.tab'. Caution: If given a directory it will try to parse ALL files with these file extensions so ensure only appropriate files are in the folder."
         },
-        "min_length": {
-          "type": "integer",
-          "title": "Minimum sequence length to keep",
-          "description": "Filter out sequences that are shorter than this value",
-          "default": 0,
-          "help_text": ""
-        },
-        "max_n_content": {
-          "type": "number",
-          "title": "Maximum N content",
-          "description": "Maximum N content proportion to keep (e.g. 0.1)",
-          "default": 0.2,
-          "help_text": ""
-        },
-        "alignment_only": {
-          "type": "boolean",
-          "title": "Stop workflow after alignment steps",
-          "default": false,
-          "description": "Stop workflow after alignment step so no masking or tree building is run. (default: Run entire pipeline).",
-          "help_text": "If selected, the seq-qc, mafft alignment, and aln-qc steps will run and the workflow will end. A mask file will be produced as per the flags in 'Alignment QC Options' but will not be applied to your alignment."
-        },
-        "run_mask": {
-          "type": "boolean",
-          "title": "Run masking step",
-          "default": false,
-          "description": "Mask the input alignment before running IQ-TREE (default: Do NOT mask).",
-          "help_text": "By default, the alignment generated from your input fasta files will NOT have problematic sites masked. If masking is not selected (default), a mask file will still be generated as per the flags in 'Alignment QC Options' so you can see what would be masked in your alignment if you run this masking step."
-        },
-        "tree_model": {
+        "seq_id_delimiter": {
           "type": "string",
-          "title": "IQ-TREE substitution model",
-          "description": "Choose which substitution model IQ-TREE will use to reconstruct a phylogenetic tree.",
-          "help_text": "The default, TEST, will make iqtree run the model selection step and automatically choose its preferred model. The 'MFP' option will run the model selection step with the addition of FreeRate models",
-          "default": "TEST",
-          "enum": ["TEST","MFP","JC","HKY","TN","GTR","JC+G","HKY+G","TN+G","GTR+G"
-                  ]
+          "title": "ID delimiter",
+          "description": "Choose the ID delimiter (default: `|`).",
+          "help_text": "The ID delimiter is the character that separates each element in the headers provided in your fasta files."
+        },
+        "seq_id_field_index": {
+          "type": "integer",
+          "title": "ID field",
+          "description": "Choose the 0-based index position of the ID in your input headers (default: 0)",
+          "help_text": "If the header is split using the delimiter from 'ID delimiter' above, choose the 0-based position of the sequence ID that can be used to match the Metadata ID."
+        },
+        "metadata_delimiter": {
+          "type": "string",
+          "title": "Metadata Delimiter",
+          "description": "Metadata file delimiter (default: `,`). Will auto-detect and parse .tsv/.tab files",
+          "help_text": "Explicitly choose what delimiter to use when parsing the metadata files."
         }
-
       },
       "allOf": [
         {
@@ -73,22 +53,100 @@
         }
       ]
     },
+    "pipeline_options": {
+      "title": "Pipeline Options",
+      "type": "object",
+      "fa_icon": "fas fa-wrench",
+      "description": "Configure optional settings within the raccoon pipeline.",
+      "properties": {
+        "alignment_only": {
+          "type": "boolean",
+          "title": "Stop workflow after alignment steps",
+          "default": false,
+          "description": "Stop workflow after alignment step so phylogenetics is not performed. (default: Run entire pipeline).",
+          "help_text": "If selected, the seq-qc, mafft alignment, and aln-qc steps will run and the workflow will end. A mask file will be produced as per the flags in 'Alignment QC Options' but will not be applied to your alignment."
+        },
+        "run_mask": {
+          "type": "boolean",
+          "title": "Run masking step",
+          "default": false,
+          "description": "Mask the input alignment before running IQ-TREE (default: Do NOT mask).",
+          "help_text": "By default, the alignment generated from your input fasta files will NOT have problematic sites masked. If masking is not selected (default), a mask file will still be generated as per the flags in 'Alignment QC Options' but it will not be applied to the sequence prior to tree building."
+        },
+        "tree_model": {
+          "type": "string",
+          "title": "IQTREE substitution model",
+          "description": "Choose which substitution model IQTREE will use to reconstruct a phylogenetic tree.",
+          "help_text": "The default, TEST, will make IQTREE run the model selection step and automatically choose its preferred model. The 'MFP' option will run the model selection step with the addition of FreeRate models",
+          "default": "TEST",
+          "enum": ["TEST","MFP","JC","HKY","TN","GTR","JC+G","HKY+G","TN+G","GTR+G"
+                  ]
+        },
+        "outgroup": {
+          "type": "string",
+          "title": "Outgroup",
+          "description": "Sequence header for the outgroup to be used in tree building (default: no outgroup)",
+          "help_text": "This needs to match the sequence header of the outgroup after any header manipulation by seq-qc. For example if there was no metadata for the outgroup this may look like 'IDXXXX||'. This will also be used to prune the outgroup from the resulting tree."          
+        },
+        "midpoint_root": {
+          "type": "boolean",
+          "title": "Midpoint root",
+          "default": true,
+          "description": "Midpoint root the resulting tree for report visualisation (Default: True if no outgroup provided).",
+          "help_text": "This is only applied when an outgroup has NOT been provided, as otherwise Ancestral State Reconstruction is run which requires trees to be outgroup rooted."
+        },
+        "threads": {
+          "type": "integer",
+          "default": 2,
+          "title": "Maximum number of CPU threads",
+          "description": "Maximum number of CPU threads to use per workflow task.",
+          "help_text": "Several tasks in this workflow benefit from using multiple CPU threads. This option sets the number of CPU threads for all such processes. The total CPU resource used by the workflow is constrained by the executor configuration. See server threads parameter for kraken specific threads."
+        }
+      }
+    },
     "seq_qc": {
       "title": "Sequence QC Options",
       "type": "object",
       "fa_icon": "fas fa-wrench",
-      "description": "Change settings for the Raccoon seq-qc module.",
+      "description": "Change settings for the raccoon seq-qc module.",
       "properties": {
-        "metadata_delimiter": {
+        "min_length": {
+          "type": "integer",
+          "title": "Minimum sequence length to keep",
+          "description": "Filter out sequences that are shorter than this value",
+          "default": 0,
+          "help_text": "Filter out sequences that are shorter than this value. This is the minimum length a sequence must have to be kept in the analysis. For example, if your sequences are around 30,000bp and you set this to 29,000, any sequences shorter than 29,000bp will be filtered out."
+        },
+        "max_n_content": {
+          "type": "number",
+          "title": "Maximum N content",
+          "description": "Maximum N content proportion to keep (e.g. 0.2 for 20% N content).",
+          "default": 0.2,
+          "help_text": "Valid float between 0 and 1. Filter out sequences that have an N content higher than this value. This is the proportion of the sequence that can be made up of Ns. For example, if your sequences are around 30,000bp and you set this to 0.2, any sequences with more than 6000 Ns will be filtered out."
+        },
+        "header_fields": {
           "type": "string",
-          "title": "Metadata Delimiter",
-          "description": "Metadata file delimiter (default: ,). Will auto-detect and parse .tsv/.tab files",
-          "help_text": "Explicitly choose what delimiter to use when parsing the metadata files."
+          "title": "Header fields",
+          "description": "Preconfigured template for constructing harmonised sequence headers ( e.g. {sample}|{location}|{date} ).",
+          "help_text": "Choose from the common header templates provided or build a custom one in the 'Custom header template' option below.",
+          "default": "{sample}|{location}|{date}",
+          "enum": ["{sample}|{location}|{date}",
+          "{sample}|{admin1}|{admin2}|{date}",
+          "{sample}|{country}|{date}",
+          "{sample}|{host}|{location}|{date}",
+          "{sample}|{location}|{collection_date}"
+                  ]
+        },
+        "custom_header_fields": {
+          "type": "string",
+          "title": "Custom header template",
+          "description": "Template for constructing a custom sequence header structure not listed above ( e.g. {sampleID}|{country}|{health_zone}|{collection_date} ).",
+          "help_text": "Use this to generate new headers based on the columns in your metadata files. Surround each column title with {} and place your delimiter of choice between each entry. Overrides header separator option."
         },
         "metadata_id_field": {
           "type": "string",
           "title": "Metadata ID field",
-          "description": "Metadata id column (default: id).",
+          "description": "Metadata id column (default: sample).",
           "help_text": "Provide the header of the ID column in the provided metadata file."
         },
         "metadata_location_field": {
@@ -101,31 +159,13 @@
           "type": "string",
           "title": "Metadata Date field",
           "description": "Metadata Date column (default: date).",
-          "help_text": "Provide the header of the ID column in the provided metadata file."
-        },
-        "seq_id_delimiter": {
-          "type": "string",
-          "title": "ID delimiter",
-          "description": "Choose the ID delimiter (default: |).",
-          "help_text": "The ID delimiter is the character that separates each element in the headers provided in your fasta files."
-        },
-        "seq_id_field_index": {
-          "type": "integer",
-          "title": "ID field",
-          "description": "Choose the 0-based index position of the ID in your input headers (default: 0)",
-          "help_text": "If the header is split using the delimiter from 'ID delimiter' above, choose the 0-based position of the sequence ID that can be used to match the Metadata ID."
-        },
-        "header_fields": {
-          "type": "string",
-          "title": "Header fields",
-          "description": "Template for constructing harmonised sequence headers ( e.g. {id}|{location}|{date} ).",
-          "help_text": "Use this to generate new headers based on the columns in your metadata files. Surround each column title with {} and place your delimiter of choice between each entry. Overrides header separator option."
+          "help_text": "Provide the header of the date column in the provided metadata file."
         },
         "header_separator": {
           "type": "string",
           "title": "Header separator",
-          "description": "Choose the header separator (default: |).",
-          "help_text": "The header separator is the character that separates each element in the newly generated headers."
+          "description": "Choose the header separator (default: `|`).",
+          "help_text": "The header separator is the character that will separate each element in the newly generated FASTA header."
         }
       }
     },
@@ -133,8 +173,42 @@
       "title": "Alignment QC Options",
       "type": "object",
       "fa_icon": "fas fa-wrench",
-      "description": "Change settings for the Raccoon aln-qc module.",
+      "description": "Change settings for the raccoon aln-qc module.",
       "properties": {
+        "flag_removal_threshold": {
+          "type": "integer",
+          "title": "Flag for removal threshold",
+          "description": "The threshold of flagged SNPSs above which sequences will be flagged for removal (default: 20 SNPs).",
+          "help_text": "If a sequence has over this number of potentially probelmatic SNPs flagged, it will be flagged as a sequence to remove from your analysis rather than masking specific sites in the alignment."
+        },
+        "no_flag_clustered": {
+          "type": "boolean",
+          "title": "Do not flag clustered SNPs",
+          "default": false,
+          "description": "Skip flagging clustered SNPs (default: False).",
+          "help_text": "Choose to flag clustered snps or not. Can be used to mask resulting alignment."
+        },
+        "no_flag_n_adjacent": {
+          "type": "boolean",
+          "title": "Do not flag N adjacent SNPs",
+          "default": false,
+          "description": "Skip flagging SNPs adjacent to Ns (default: False).",
+          "help_text": "Choose to flag any SNPs next to Ns in your alignment. Can be used to mask resulting alignment."
+        },
+        "no_flag_gap_adjacent": {
+          "type": "boolean",
+          "title": "Do not flag gap adjacent SNPs",
+          "default": false, 
+          "description": "Skip flagging SNPs adjacent to gaps (default: False).",
+          "help_text": "Choose to flag any SNPs next to gaps (-) in your alignment. Can be used to mask resulting alignment."
+        },
+        "no_flag_frame_break": {
+          "type": "boolean",
+          "title": "Do not flag frame breaks",
+          "default": false,
+          "description": "Skip flagging any frame-breaking indels (default: False).",
+          "help_text": "Choose to flag any insertions or deletions that lead to reading frame breaks or not. Can be used to mask resulting alignment. Requires a genbank file. CURRENTLY UNSUPPORTED IN EPI2ME - IGNORED"
+        },
         "cluster_window": {
           "type": "integer",
           "title": "Cluster window size",
@@ -144,56 +218,8 @@
         "cluster_count": {
           "type": "integer",
           "title": "Cluster count",
-          "description": "Min SNPs in window to flag as clustered (default: 3).",
+          "description": "The number of SNPs within the cluster window that will be flagged as clustered SNPs (default: 3).",
           "help_text": ""
-        },
-        "no_flag_clustered": {
-          "type": "boolean",
-          "title": "Don't flag clustered SNPs",
-          "default": false,
-          "description": "Skip flagging clustered SNPs (default: False).",
-          "help_text": "Choose to flag clustered snps or not. Can be used to mask resulting alignment."
-        },
-        "no_flag_n_adjacent": {
-          "type": "boolean",
-          "title": "Don't flag N adjacent SNPs",
-          "default": false,
-          "description": "Skip flagging SNPs adjacent to Ns (default: False).",
-          "help_text": "Choose to flag any SNPs next to Ns in your alignment. Can be used to mask resulting alignment."
-        },
-        "no_flag_gap_adjacent": {
-          "type": "boolean",
-          "title": "Don't flag gap adjacent SNPs",
-          "default": false, 
-          "description": "Skip flagging SNPs adjacent to gaps (default: False).",
-          "help_text": "Choose to flag any SNPs next to gaps (-) in your alignment. Can be used to mask resulting alignment."
-        },
-        "no_flag_frame_break": {
-          "type": "boolean",
-          "title": "Don't flag frame breaks",
-          "default": false,
-          "description": "Skip flagging any frame-breaking indels (default: False).",
-          "help_text": "Choose to flag any insertions or deletions that lead to reading frame breaks or not. Can be used to mask resulting alignment. Requires a genbank file. CURRENTLY UNSUPPORTED IN EPI2ME - IGNORED"
-        },
-        "flag_removal_threshold": {
-          "type": "integer",
-          "title": "Flag for removal threshold",
-          "description": "Alter the threshold at which sequences are flagged for removal (default: 20).",
-          "help_text": "This works in conjunction with the flags outlined above. If a sequence has over N (default: 20) flags it will be suggested as a sequence to remove from your analysis."
-        }
-      }
-    },
-    "iqtree_prune": {
-      "title": "IQTREE",
-      "type": "object",
-      "fa_icon": "fas fa-wrench",
-      "description": "Change settings for IQTREE.",
-      "properties": {
-        "outgroup": {
-          "type": "string",
-          "title": "Outgroup",
-          "description": "Sequence header for the outgroup to be used in tree building (default: no outgroup)",
-          "help_text": "This needs to match the sequence header of the outgroup after any header manipulation by seq-qc. For example if there was no metadata for the outgroup this may look like 'IDXXXX||'. This will also be used to prune the outgroup from the resulting tree."          
         }
       }
     },
@@ -201,67 +227,36 @@
       "title": "Tree QC Options",
       "type": "object",
       "fa_icon": "fas fa-wrench",
-      "description": "Change settings for the Raccoon tree-qc module.",
+      "description": "Change settings for the raccoon tree-qc module.",
       "properties": {
-        "long_branch_sd": {
-          "type": "integer",
-          "title": "Long branch Standard deviation",
-          "description": "Standard deviation threshold for long branch flagging (default: 3.0).",
-          "help_text": ""
+        "run_apobec": {
+          "type": "boolean",
+          "title": "Check for APOBEC3-type mutations",
+          "description": "Run APOBEC3 reconstruction.",
+          "help_text": "Choose to run APOBEC3 phylo checks or not. An outgroup sequence is required to run this check as ancestral state reconstruction is performed."
         },
         "run_adar": {
           "type": "boolean",
-          "title": "Run ADAR",
-          "description": "Run ADAR phylo checks.",
-          "help_text": "Choose to mask clustered snps from resulting alignment or not."
+          "title": "Check for ADAR-type mutations",
+          "description": "Run ADAR reconstruction.",
+          "help_text": "Choose to run ADAR phylo checks or not. An outgroup sequence is required to run this check as ancestral state reconstruction is performed."
         },
         "adar_window": {
           "type": "integer",
           "title": "ADAR window size",
-          "description": "Max distance (bp) for ADAR cluster window (default: 300).",
-          "help_text": ""
+          "description": "The span in base pairs for ADAR cluster window (default: 300).",
+          "help_text": "Specify the maximum distance in base pairs for the ADAR cluster window."
         },
         "adar_min_count": {
           "type": "integer",
-          "title": "Minimun ADAR sites count",
-          "description": "Min ADAR sites in window to flag a branch (default: 3).",
+          "title": "Minimum ADAR sites count",
+          "description": "Minimum ADAR-type mutations within the ADAR window to flag a branch (default: 3).",
           "help_text": ""
         },
-        "run_apobec": {
-          "type": "boolean",
-          "title": "Run APOBEC",
-          "description": "Run APOBEC phylo checks.",
-          "help_text": ""
-        },
-        "tip_fields": {
-          "type": "string",
-          "title": "Tip fields",
-          "description": "Template for parsing the tip label fields for colouring (default: {id}|{location}|{date} OR 'header_fields' from 'Sequence QC options' if given).",
-          "help_text": "If 'header_fields' in the 'Sequence QC options' section has been specified this option will use that input by default."
-        },
-        "tip_field_delimiter": {
-          "type": "string",
-          "title": "Tip field delimiter",
-          "description": "Delimiter for parsing tip label fields (default: |)",
-          "help_text": "Change this if using a different field separator via the 'header separator' option in the 'Sequence QC options' section."
-        },
-        "tip_date_field": {
-          "type": "string",
-          "title": "Tip date field",
-          "description": "Date field for parsing tip label fields (default: date)",
-          "help_text": ""
-        },
-        "midpoint_root": {
-          "type": "boolean",
-          "title": "Midpoint root",
-          "default": true,
-          "description": "Midpoint root the resulting tree for report visualisation (Default: True if no outgroup provided).",
-          "help_text": "This is only applied when an outgroup has NOT been provided, as otherwise Ancestral State Reconstruction is run which requires trees to be outgroup rooted."
-        },
-        "fig_height": {
-          "type": "number",
-          "title": "Figure height",
-          "description": "Adjust the output figure height.",
+        "long_branch_sd": {
+          "type": "integer",
+          "title": "Long branch Standard deviation",
+          "description": "Standard deviation threshold for long branch flagging (default: 3.0).",
           "help_text": ""
         }
       }
@@ -277,21 +272,12 @@
           "default": "output",
           "title": "Output folder name",
           "description": "Directory for output of all user-facing files."
-        }
-      }
-    },
-    "advanced_options": {
-      "title": "Advanced Options",
-      "type": "object",
-      "description": "Advanced options for configuring processes inside the workflow.",
-      "default": "",
-      "properties": {
-        "threads": {
-          "type": "integer",
-          "default": 2,
-          "title": "Maximum number of CPU threads",
-          "description": "Maximum number of CPU threads to use per workflow task.",
-          "help_text": "Several tasks in this workflow benefit from using multiple CPU threads. This option sets the number of CPU threads for all such processes. The total CPU resource used by the workflow is constrained by the executor configuration. See server threads parameter for kraken specific threads."
+        },
+        "fig_height": {
+          "type": "number",
+          "title": "Tree figure height",
+          "description": "Adjust the output tree figure height.",
+          "help_text": ""
         }
       }
     },
@@ -323,10 +309,19 @@
       "$ref": "#/definitions/input_options"
     },
     {
-      "$ref": "#/definitions/output_options"
+      "$ref": "#/definitions/pipeline_options"
     },
     {
-      "$ref": "#/definitions/advanced_options"
+      "$ref": "#/definitions/seq_qc"
+    },
+    {
+      "$ref": "#/definitions/aln_qc"
+    },
+    {
+      "$ref": "#/definitions/tree_qc"
+    },
+    {
+      "$ref": "#/definitions/output_options"
     },
     {
       "$ref": "#/definitions/miscellaneous_options"
@@ -350,12 +345,12 @@
       "type": "boolean",
       "default": true
     },
-    "show_hidden_params": {
+    "show_hidden": {
       "type": "boolean"
     }
   },
   "docs": {
-    "intro": "\nLorem Ipsum Dolor\n\n",
+    "intro": "\nRaccoon docs\n\n",
     "links": "## Useful links\n\n* [nextflow](https://www.nextflow.io/)\n* [docker](https://www.docker.com/products/docker-desktop)"
   }
 }

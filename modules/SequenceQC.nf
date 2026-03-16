@@ -43,7 +43,9 @@ process seqQC {
     if (params.header_separator) {
         extra += " --header-separator '${params.header_separator}'"
     }
-    if (params.header_fields) {
+    if (params.custom_header_fields) {
+        extra += " --header-fields '${params.custom_header_fields}'"
+    } else {
         extra += " --header-fields '${params.header_fields}'"
     }
 
