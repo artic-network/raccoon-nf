@@ -58,18 +58,22 @@ workflow {
     
     // Define the workflow inputs
 
-    // check if params.fasta is a directory or a file.
-    input_fasta = file("${params.fasta}")
-    if ( input_fasta.extension.equals("fasta") || input_fasta.extension.equals("fa")) {
-        inFasta_ch = Channel.fromPath(input_fasta).map { [it.baseName, it] }
+    // Initially check if the profile is test or not - this is to let epi2me run the test profile.
+    if (workflow.profile == "test") {
+        input_fasta = file("${projectDir}/assets/test_data")
     } else {
-        input_dir_files = file("${params.fasta}").list()
-        fasta_extensions = [".fasta", ".fa"]
-	    matching_files =  input_dir_files.findAll { a -> fasta_extensions.any { a.contains(it) } }
-        input_files = matching_files.collect {"$input_fasta/$it"}
-        inFasta_ch = Channel.fromPath(input_files).collect().map { [input_fasta.baseName, it] }
+        // check if params.fasta is a directory or a file.   
+        input_fasta = file("${params.fasta}")
+        if ( input_fasta.extension.equals("fasta") || input_fasta.extension.equals("fa")) {
+            inFasta_ch = Channel.fromPath(input_fasta).map { [it.baseName, it] }
+        } else {
+            input_dir_files = file("${params.fasta}").list()
+            fasta_extensions = [".fasta", ".fa"]
+            matching_files =  input_dir_files.findAll { a -> fasta_extensions.any { a.contains(it) } }
+            input_files = matching_files.collect {"$input_fasta/$it"}
+            inFasta_ch = Channel.fromPath(input_files).collect().map { [input_fasta.baseName, it] }
+        }
     }
-
     // Metadata is optional, and can also be either a file or dir
     // Will deal with optional input as per https://nextflow-io.github.io/patterns/optional-input/
     input_metadata = file("${params.metadata}")
