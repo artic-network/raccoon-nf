@@ -1,0 +1,44 @@
+sample,admin0,admin1,admin2,date,travel history,notes
+PHL001,Articia,Mylona Marsh,Morang'a Moor,2025-12-03,,
+PHL002,Articia,Mylona Marsh,Morang'a Moor,2025-12-08,,
+PHL003,Articia,Mylona Marsh,Morang'a Moor,2025-12-28,,
+PHL004,Articia,Mylona Marsh,Quaye Quay,2026-01-02,,
+PHL005,Articia,Mylona Marsh,Donkor Dale,2026-01-03,,
+PHL006,Articia,Mylona Marsh,Elliville,2026-01-05,,
+PHL007,Articia,Mylona Marsh,Bedeburgh,2026-01-10,,
+PHL008,Articia,Mylona Marsh,Faux Kent,2026-01-17,,
+PHL009,Articia,Mylona Marsh,Morang'a Moor,2026-01-20,,
+PHL010,Articia,Mylona Marsh,Bedeburgh,2026-01-20,,
+PHL011,Articia,Mylona Marsh,Elliville,2026-01-23,,
+PHL012,Articia,MYLONA MARSH,Lusamaki Lake,2026-01-26,,
+PHL013,Articia,Mylona Marsh,Lililand,2026-01-30,,from SSE
+PHL014,Articia,Mylona Marsh,Morang'a Moor,2026-02-01,,
+PHL015,Articia,Mylona Marsh,Maloney Mere,2026-02-01,,
+PHL016,Articia,Mylona Marsh,Lililand,2026-02-05,,
+PHL017,Articia,Mylona Marsh,Donkor Dale,2026-02-06,,
+PHL018,Articia,Mylona Marsh,Elliville,2026-02-07,,
+PHL019,Articia,Mylona Marsh,Lililand,2026-02-07,,
+PHL020,ARTICIA,Mylona Marsh,Elliville,2026-02-08,,
+PHL021,ARTICIA,MYLONA MARSH,Lililand,2026-02-08,,
+PHL022,Articia,Lomanland,Nickopolis,2026-02-08,none,Lomanland index (no travel history - missing links?)
+PHL023,Articia,Lomanland,Nickopolis,2026-02-09,,Lomanland outbreak
+PHL024,Articia,Mylona Marsh,Lusamaki Lake,2026-02-10,,super spreading event (SSE) index
+PHL025,Articia,Mylona Marsh,Elliville,2026-02-10,,from SSE
+PHL026,Articia,Mylona Marsh,Elliville,2026-02-10,,from SSE
+PHL027,ARTICIA,MYLONA MARSH,Myra Myre,2026-02-11,,
+PHL028,Articia,Mylona Marsh,Morang'a Moor,2026-02-11,,
+PHL029,Articia,Mylona Marsh,Myra Myre,2026-02-14,,
+PHL030,Articia,Mylona Marsh,Elliville,2026-02-15,,secondary case of SSE (contact of PHL026)
+PHL031,Articia,Mylona Marsh,Elliville,2026-02-16,,from SSE
+PHL032,Articia,Lomanland,Nickopolis,2026-02-16,,Lomanland outbreak
+PHL033,Articia,Mylona Marsh,Elliville,17-02-2026,,from SSE
+PHL034,Articia,Mylona Marsh,Joyce Jungle,18/02/2026,,
+PHL035,Articia,Mylona Marsh,Elliville,2026-02-18,,from SSE
+PHL036,Articia,Mylona Marsh,Elliville,2026-02-19,,
+PHL037,Articia,Mylona Marsh,Joyce Jungle,2026-02-20,,
+PHL038,Articia,Mylona Marsh,Elliville,2026-02-20,,from SSE
+PHL039,Articia,Mylona Marsh,Myra Myre,2026-02-24,,
+PHL040,Articia,Mylona Marsh,Elliville,2026-02-24,,
+PHL041,Articia,Mylona Marsh,Lililand,2026-02-26,,from SSE
+PHL042,Articia,Mylona Marsh,Myra Myre,2026-02-27,,
+PHL043,Articia,Mylona Marsh,Duggan Demesne,2026-02-28,Goodfellow Forest,new zoonosis (travel link to Goodfellow Forest)
